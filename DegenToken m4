@@ -1,1 +1,40 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
 
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract DegenGamingToken is ERC20, Ownable {
+    constructor() ERC20("Degen_token ", "DGN") {
+        // Mint initial supply to contract deployer
+    }
+     function mint(address account, uint256 amount) public onlyOwner {
+        _mint(account, amount);
+    
+
+    }
+     function transferTokens(address _reciever_add, uint amount) external{
+            require(balanceOf(msg.sender) >= amount, "Low Balance");
+            approve(msg.sender, amount);
+            transferFrom(msg.sender, _reciever_add, amount);
+        }
+
+    // Redeem tokens for in-game items
+    function redeem(uint256 amount) public {
+        require(balanceOf(msg.sender) >= amount, "Insufficient balance");
+        _burn(msg.sender, amount);
+        // Add logic to handle in-game item redemption
+    }
+
+    // Burn tokens (anyone can call)
+    function burn(uint256 amount) public {
+        require(balanceOf(msg.sender) >= amount, "Insufficient balance");
+        _burn(msg.sender, amount);
+    }
+
+    function Balance() external view returns (uint256) 
+    { 
+        return this.balanceOf(msg.sender);
+    }
+}
+//0xdCADEF53E78C725231f5A33E85363dC6FFb2E7a6

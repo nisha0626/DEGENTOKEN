@@ -5,36 +5,45 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract DegenGamingToken is ERC20, Ownable {
-    constructor() ERC20("Degen_token ", "DGN") {
-        // Mint initial supply to contract deployer
-    }
-     function mint(address account, uint256 amount) public onlyOwner {
-        _mint(account, amount);
+    string[] private arr;
+
+    constructor() ERC20("Degen_token", "DGN") {
     
-
+        arr = ["Position 1", "Position 2", "Position 3"];
     }
-     function transferTokens(address _reciever_add, uint amount) external{
-            require(balanceOf(msg.sender) >= amount, "Low Balance");
-            approve(msg.sender, amount);
-            transferFrom(msg.sender, _reciever_add, amount);
-        }
 
-    // Redeem tokens for in-game items
-    function redeem(uint256 amount) public {
-        require(balanceOf(msg.sender) >= amount, "Insufficient balance");
-        _burn(msg.sender, amount);
-        // Add logic to handle in-game item redemption
+    function redeem(uint _position, uint __price) public {
+        require(
+            _position < arr.length,
+            "Position does not exist"
+        );
+
+        require(
+            balanceOf(msg.sender) >= __price,
+            "Insufficient balance"
+        );
+
+        _burn(msg.sender, __price);
+        // Add any other logic for redeeming here
+    }
+
+    function mint(address account, uint amount) public onlyOwner {
+        _mint(account, amount);
+    }
+
+    function transferTokens(address _receiver_add, uint amount) external {
+        require(balanceOf(msg.sender) >= amount, "Low Balance");
+        _approve(msg.sender, _receiver_add, amount);
+        _transfer(msg.sender, _receiver_add, amount);
     }
 
     // Burn tokens (anyone can call)
-    function burn(uint256 amount) public {
+    function burn(uint amount) public {
         require(balanceOf(msg.sender) >= amount, "Insufficient balance");
         _burn(msg.sender, amount);
     }
 
-    function Balance() external view returns (uint256) 
-    { 
-        return this.balanceOf(msg.sender);
+    function getBalance() external view returns (uint) {
+        return balanceOf(msg.sender);
     }
 }
-//0xdCADEF53E78C725231f5A33E85363dC6FFb2E7a6

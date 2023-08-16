@@ -15,7 +15,7 @@ This README provides an overview of the smart contract's functionality.
 
 # Functionality
 
-## Minting New Tokens:
+## Minting  Tokens:
 
 The smart contract allows authorized addresses to mint new tokens.
  
